@@ -1,50 +1,53 @@
 DROP TABLE IF EXISTS reservation;
 DROP TABLE IF EXISTS address;
-DROP TABLE IF EXISTS resource;
+DROP TABLE IF EXISTS rezource;
 DROP TABLE IF EXISTS person;
 
 CREATE TABLE person (
   person_id int unsigned NOT NULL AUTO_INCREMENT,
-  first_name varchar(100) NOT NULL, 
-  middle_name varchar(100),
-  last_name varchar(45) NOT NULL,
-  email varchar (320) NOT NULL,
-  phone varchar(20) NOT NULL,
+  first_name VARCHAR2(100) NOT NULL, 
+  middle_name VARCHAR2(100),
+  last_name VARCHAR2(45) NOT NULL,
+  email VARCHAR2 (320) NOT NULL,
+  phone VARCHAR2(20) NOT NULL,
+  country_code VARCHAR2(5),
   PRIMARY KEY (person_id),
   UNIQUE KEY (email)
 );
 
-CREATE TABLE resource (
-	resource_id int unsigned NOT NULL AUTO_INCREMENT,
-	name varchar(200) NOT NULL,
-	description varchar(1000) NOT NULL,
-	resource_type enum('person', 'place', 'thing') NOT NULL,
-	resourcer_id int unsigned NOT NULL,
+CREATE TABLE rezource (
+	rezource_id int unsigned NOT NULL AUTO_INCREMENT,
+	name VARCHAR2(200) NOT NULL,
+	description VARCHAR2(1000) NOT NULL,
+	rezource_type enum('service', 'place', 'thing') NOT NULL,
+	rezourcer_id int unsigned NOT NULL,
 	schedule_type enum('hourly', 'daily') NOT NULL,
 	price decimal(9,2) NOT NULL,
 	start_time TIME NOT NULL,
 	end_time TIME NOT NULL,
-	PRIMARY KEY (resource_id),
-	UNIQUE KEY (name, resourcer_id)
+	key_words VARCHAR2(200),
+	PRIMARY KEY (rezource_id),
+	UNIQUE KEY (name, rezourcer_id),
+	CONSTRAINT FK_PersonRezource FOREIGN KEY (rezourcer_id) REFERENCES person(person_id) ON DELETE CASCADE
 );
 
 CREATE TABLE address (
 	address_id int unsigned NOT NULL AUTO_INCREMENT,
-	addr1 varchar(200) NOT NULL,
-	addr2 varchar(200) NOT NULL,
-	city varchar(200) NOT NULL,
-	state varchar(2),
-	province varchar(200),
-	postal_code varchar(10) NOT null,
-	country varchar(60) NOT NULL,
-	resource_id int unsigned,
-	resourcer_id int unsigned,
-	scheduler_id int unsigned,
+	addr1 VARCHAR2(200) NOT NULL,
+	addr2 VARCHAR2(200) NOT NULL,
+	city VARCHAR2(200) NOT NULL,
+	state VARCHAR2(2),
+	province VARCHAR2(200),
+	postal_code VARCHAR2(10) NOT null,
+	country VARCHAR2(60) NOT NULL,
+	billing char(1),
+	delivery char(1),
+	rezource_id int unsigned,
+	person_id int unsigned,
 	PRIMARY KEY (address_id),
-	UNIQUE KEY (addr1, addr2, postal_code, country),
-	FOREIGN KEY (resource_id) REFERENCES resource (resource_id),
-	FOREIGN KEY (resourcer_id) REFERENCES person (person_id),
-	FOREIGN KEY (scheduler_id) REFERENCES person (person_id)
+	UNIQUE KEY (addr1, addr2, postal_code, country, person_id),
+	CONSTRAINT FK_RezourceAddress FOREIGN KEY (rezource_id) REFERENCES rezource(rezource_id),
+	CONSTRAINT FK_PersonAddress FOREIGN KEY (person_id) REFERENCES person (person_id) ON DELETE CASCADE
 );
 
 CREATE TABLE reservation (
@@ -53,11 +56,11 @@ CREATE TABLE reservation (
 	date_to DATE NOT NULL,
 	start_time TIME NOT NULL,
 	end_time TIME NOT NULL,
-	resource_id int unsigned NOT NULL,
+	rezource_id int unsigned NOT NULL,
 	scheduler_id int unsigned NOT NULL,
 	address_id int unsigned NOT NULL,
 	PRIMARY KEY (reservation_id),
-	FOREIGN KEY (resource_id) resource (resource_id),
-	FOREIGN KEY (scheduler_id) person (person_id),
-	FOREIGN KEY (address_id) address (address_id)
+	CONSTRAINT FK_RezourceReservation FOREIGN KEY (rezource_id) REFERENCES rezource(rezource_id),
+	CONSTRAINT FK_SchedulerReservation FOREIGN KEY (scheduler_id) REFERENCES person(person_id),
+	CONSTRAINT FK_AddressReservation FOREIGN KEY (address_id) REFERENCES address(address_id)
 );
