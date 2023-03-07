@@ -11,7 +11,7 @@ CREATE TABLE person (
   email VARCHAR (320) NOT NULL,
   phone VARCHAR(20) NOT NULL,
   country_code VARCHAR(5),
-  status enum('active','terminated','inactive','not verified') NOT NULL,
+  status enum('Active','Terminated','Inactive','NotVerified') NOT NULL,
   PRIMARY KEY (person_id),
   UNIQUE KEY (email)
 );
@@ -41,7 +41,7 @@ CREATE TABLE rezource (
 	model varchar(200),
 	year int unsigned,
 	key_words VARCHAR(200),
-	status enum('active','inactive','not verified','terminated') NOT NULL,
+	status enum('Active','Terminated','Inactive','NotVerified') NOT NULL,
 	PRIMARY KEY (rezource_id),
 	UNIQUE KEY (name, rezourcer_id),
 	CONSTRAINT FK_PersonRezource FOREIGN KEY (rezourcer_id) REFERENCES person(person_id) ON DELETE CASCADE
