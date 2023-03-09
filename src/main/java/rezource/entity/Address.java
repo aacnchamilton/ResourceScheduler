@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Address {
-  private long addressId;
+  private Long addressId;
+  private Long rezourceId;
+  private Long personId;
   private String addr1;
   private String addr2;
   private String city;
@@ -20,6 +22,4 @@ public class Address {
   private String country;
   private char billing;
   private char delivery;
-  private long rezourceId;
-  private long personId;
 }

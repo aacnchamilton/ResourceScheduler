@@ -24,6 +24,7 @@ CREATE TABLE rezource (
 	rezourcer_id int unsigned NOT NULL,
 	schedule_type enum('Hourly', 'Daily', 'Monthly') NOT NULL,
 	regular_rate decimal(9,2) NOT NULL,
+	travel_rate decimal(9,2),
 	deposit decimal(9,2),
 	cleaning_fee decimal(9,2),
 	emerg_rate decimal(9,2),
